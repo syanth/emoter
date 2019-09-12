@@ -1,4 +1,4 @@
-# Emotify
+# Emoter
 
 Firefox extension for custom emotes.
 
