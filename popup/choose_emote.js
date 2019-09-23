@@ -27,12 +27,16 @@ function updateClipboard(path) {
         if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
           // DIV to contain each matching image
           b = document.createElement("DIV");
+          b.setAttribute("class", "autocomplete-item");
+          b.innerHTML = "<span class=\"emote-text\"><strong>" 
+            + arr[i].substr(0, val.length) + "</strong>" 
+            + arr[i].substr(val.length) + "</span>";
           let emoteImage = document.createElement("img");
           let emotestr = "img/" + arr[i] + ".png";
           emoteImage.setAttribute("src", emotestr);
-          emoteImage.className = "emote-image";
+          emoteImage.setAttribute("class", "emote-image");
           b.appendChild(emoteImage);
-              b.addEventListener("click", function(e) {
+          b.addEventListener("click", function(e) {
                 updateClipboard("popup/" + emotestr);
                 closeAllLists();
           });
