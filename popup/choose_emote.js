@@ -12,11 +12,26 @@ function updateClipboard(path) {
 // Text Field and array
  function autocomplete(inp, arr) {
   var currentFocus;
+
+  var nameList;
+  nameList = [];
+  var gettingItem = browser.storage.sync.get('recent');
+  gettingItem.then((res) => {
+    nameList = res.recent;
+    console.log(nameList);
+    addRecents();
+    console.log("Added");
+  })
+  //console.log(nameList);
+
   inp.addEventListener("input", function(e) {
       var a, b, i, val = this.value;
       // Close any already open lists of autocompleted values
       closeAllLists();
-      if (!val) { return false;}
+      if (!val) {
+        addRecents();
+        return false;
+      }
       currentFocus = -1;
       // Create a DIV element that will contain the items (values)
       a = document.createElement("DIV");
@@ -32,13 +47,19 @@ function updateClipboard(path) {
             + arr[i].substr(0, val.length) + "</strong>" 
             + arr[i].substr(val.length) + "</span>";
           let emoteImage = document.createElement("img");
+          let emoteName = arr[i];
           let emotestr = "img/" + arr[i] + ".png";
           emoteImage.setAttribute("src", emotestr);
           emoteImage.setAttribute("class", "emote-image");
           b.appendChild(emoteImage);
           b.addEventListener("click", function(e) {
-                updateClipboard("popup/" + emotestr);
-                closeAllLists();
+              if (!nameList.includes(emoteName)) {
+                if (nameList.length >= 5) {nameList.pop();}
+                nameList.unshift(emoteName);
+              }
+              saveRecent();
+              updateClipboard("popup/" + emotestr);
+              //closeAllLists();
           });
           a.appendChild(b);
         }
@@ -62,6 +83,36 @@ function updateClipboard(path) {
         }
       }
   });
+  function saveRecent() {
+    browser.storage.sync.set({
+      recent: nameList
+    })
+  }
+  function addRecents() {
+    // Adds recent emotes to the popup
+    var a = document.createElement("DIV");
+    a.setAttribute("id", this.id + "autocomplete-list");
+    a.setAttribute("class", "autocomplete-items");
+    inp.parentNode.appendChild(a);
+    var b;
+    console.log(nameList);
+    for (i = 0; i < nameList.length; i++) {
+      // DIV to contain each image
+      b = document.createElement("DIV");
+      b.setAttribute("class", "autocomplete-item");
+      b.innerHTML = "<span class=\"emote-text\">" + nameList[i] + "</span>";
+      let emoteImage = document.createElement("img");
+      let emotestr = "img/" + nameList[i] + ".png";
+      emoteImage.setAttribute("src", emotestr);
+      emoteImage.setAttribute("class", "emote-image");
+      b.appendChild(emoteImage);
+      b.addEventListener("click", function(e) {
+            updateClipboard("popup/" + emotestr);
+            //closeAllLists();
+      });
+      a.appendChild(b);
+    }
+  }
   function addActive(x) {
     /*a function to classify an item as "active":*/
     if (!x) return false;
