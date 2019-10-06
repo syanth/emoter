@@ -9,10 +9,17 @@
         "48": "icons/icon-48.png"
     },
 
+    "browser_specific_settings": {
+        "gecko": {
+          "id": "emoter@syanth"
+        }
+    },
+
     "permissions": [
         "activeTab",
         "clipboardRead",
-        "clipboardWrite"
+        "clipboardWrite",
+        "storage"
     ],
 
     "browser_action": {
