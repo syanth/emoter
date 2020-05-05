@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Emoter",
-    "version": "0.1",
+    "version": "0.2",
 
     "description": "Extension for custom emotes.",
     "homepage_url": "https://github.com/syanth",
@@ -26,5 +26,14 @@
         "default_icon": "icons/icon-32.png",
         "default_title": "Emoter",
         "default_popup": "popup/choose_emote.html"
+    },
+
+    "commands": {
+        "_execute_browser_action": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+Y",
+                "linux": "Ctrl+Shift+U"
+            }
+        }
     }
 }
