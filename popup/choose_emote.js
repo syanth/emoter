@@ -2,6 +2,7 @@
 // TODO: Make this be user editable and stored locally.
  var emotes = ["feelsbad", "squiddab", "feelsfunny"];
  autocomplete(document.getElementById("emInput"), emotes);
+ document.getElementById("emInput").focus(); 
 
 function updateClipboard(path) {
   fetch(browser.runtime.getURL(path))
@@ -20,7 +21,6 @@ function updateClipboard(path) {
     nameList = res.recent;
     console.log(nameList);
     addRecents();
-    console.log("Added");
   })
   //console.log(nameList);
 
@@ -59,7 +59,7 @@ function updateClipboard(path) {
               }
               saveRecent();
               updateClipboard("popup/" + emotestr);
-              //closeAllLists();
+              window.close();
           });
           a.appendChild(b);
         }
@@ -67,6 +67,7 @@ function updateClipboard(path) {
   });
   inp.addEventListener("keydown", function(e) {
       var x = document.getElementById(this.id + "autocomplete-list");
+      console.log(x);
       if (x) x = x.getElementsByTagName("div");
       if (e.keyCode == 40) { // down
         currentFocus++;
@@ -90,8 +91,9 @@ function updateClipboard(path) {
   }
   function addRecents() {
     // Adds recent emotes to the popup
+    currentFocus = -1;
     var a = document.createElement("DIV");
-    a.setAttribute("id", this.id + "autocomplete-list");
+    a.setAttribute("id", inp.id + "autocomplete-list");
     a.setAttribute("class", "autocomplete-items");
     inp.parentNode.appendChild(a);
     var b;
@@ -108,7 +110,7 @@ function updateClipboard(path) {
       b.appendChild(emoteImage);
       b.addEventListener("click", function(e) {
             updateClipboard("popup/" + emotestr);
-            //closeAllLists();
+            window.close();
       });
       a.appendChild(b);
     }
