@@ -31,8 +31,7 @@
     "commands": {
         "_execute_browser_action": {
             "suggested_key": {
-                "default": "Ctrl+Shift+Y",
-                "linux": "Ctrl+Shift+U"
+                "default": "Alt+O"
             }
         }
     }
