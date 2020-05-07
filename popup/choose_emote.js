@@ -10,8 +10,12 @@ function updateClipboard(path) {
   .then(buffer => browser.clipboard.setImageData(buffer, 'png'));
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // Text Field and array
- function autocomplete(inp, arr) {
+ async function autocomplete(inp, arr) {
   var currentFocus;
 
   var nameList;
@@ -24,7 +28,7 @@ function updateClipboard(path) {
   })
   //console.log(nameList);
 
-  inp.addEventListener("input", function(e) {
+  inp.addEventListener("input", async function(e) {
       var a, b, i, val = this.value;
       // Close any already open lists of autocompleted values
       closeAllLists();
@@ -52,13 +56,14 @@ function updateClipboard(path) {
           emoteImage.setAttribute("src", emotestr);
           emoteImage.setAttribute("class", "emote-image");
           b.appendChild(emoteImage);
-          b.addEventListener("click", function(e) {
+          b.addEventListener("click", async function(e) {
               if (!nameList.includes(emoteName)) {
                 if (nameList.length >= 5) {nameList.pop();}
                 nameList.unshift(emoteName);
               }
               saveRecent();
               updateClipboard("popup/" + emotestr);
+              await sleep(1);
               window.close();
           });
           a.appendChild(b);
@@ -89,7 +94,7 @@ function updateClipboard(path) {
       recent: nameList
     })
   }
-  function addRecents() {
+  async function addRecents() {
     // Adds recent emotes to the popup
     currentFocus = -1;
     var a = document.createElement("DIV");
@@ -108,8 +113,9 @@ function updateClipboard(path) {
       emoteImage.setAttribute("src", emotestr);
       emoteImage.setAttribute("class", "emote-image");
       b.appendChild(emoteImage);
-      b.addEventListener("click", function(e) {
+      b.addEventListener("click", async function(e) {
             updateClipboard("popup/" + emotestr);
+            await sleep(1);
             window.close();
       });
       a.appendChild(b);
