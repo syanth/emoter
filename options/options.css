@@ -1,0 +1,12 @@
+label {
+    display: block;
+    color: #ffffff;
+    font-weight: 600;
+  }
+  #uploadbox {
+    padding: 1px;
+  }
+  label,
+  .upload {
+    margin: .4rem 0;
+}

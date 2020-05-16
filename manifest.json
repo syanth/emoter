@@ -34,5 +34,13 @@
                 "default": "Alt+O"
             }
         }
+    },
+
+    "background": {
+        "scripts": ["background-script.js"]
+    },
+
+    "options_ui": {
+        "page": "options/options.html"
     }
 }
