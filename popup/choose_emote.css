@@ -59,6 +59,8 @@ input[type=text] {
 .emote-image {
   position: absolute;
   right: 10px;
+  height: 64px;
+  width: 64px;
 }
 .emote-text {
   color: #ffffff;
