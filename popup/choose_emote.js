@@ -1,7 +1,9 @@
+var db = new Dexie("Custom");
+db.version(1).stores({
+  emotes: "name, image"
+});
 
-// TODO: Make this be user editable and stored locally.
- var emotes = ["feelsbad", "squiddab", "feelsfunny"];
- autocomplete(document.getElementById("emInput"), emotes);
+ autocomplete(document.getElementById("emInput"));
  document.getElementById("emInput").focus(); 
 
 function updateClipboard(path) {
@@ -15,7 +17,7 @@ function sleep(ms) {
 }
 
 // Text Field and array
- async function autocomplete(inp, arr) {
+ async function autocomplete(inp) {
   var currentFocus;
 
   var nameList;
@@ -42,33 +44,38 @@ function sleep(ms) {
       a.setAttribute("id", this.id + "autocomplete-list");
       a.setAttribute("class", "autocomplete-items");
       this.parentNode.appendChild(a);
-      for (i = 0; i < arr.length; i++) {
-        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-          // DIV to contain each matching image
-          b = document.createElement("DIV");
-          b.setAttribute("class", "autocomplete-item");
-          b.innerHTML = "<span class=\"emote-text\"><strong>" 
-            + arr[i].substr(0, val.length) + "</strong>" 
-            + arr[i].substr(val.length) + "</span>";
-          let emoteImage = document.createElement("img");
-          let emoteName = arr[i];
-          let emotestr = "img/" + arr[i] + ".png";
-          emoteImage.setAttribute("src", emotestr);
-          emoteImage.setAttribute("class", "emote-image");
-          b.appendChild(emoteImage);
-          b.addEventListener("click", async function(e) {
-              if (!nameList.includes(emoteName)) {
-                if (nameList.length >= 5) {nameList.pop();}
-                nameList.unshift(emoteName);
-              }
-              saveRecent();
-              updateClipboard("popup/" + emotestr);
-              await sleep(1);
-              window.close();
-          });
-          a.appendChild(b);
-        }
-      }
+
+      // DB Query
+      db.emotes.where("name").startsWithIgnoreCase(val).each( async function (emote) {
+        let emoteName = emote.name;
+        console.log("Found: " + emote.name);
+        // DIV to contain each matching image
+        b = document.createElement("DIV");
+        b.setAttribute("class", "autocomplete-item");
+        b.innerHTML = "<span class=\"emote-text\"><strong>" 
+          + emoteName.substr(0, val.length) + "</strong>" 
+          + emoteName.substr(val.length) + "</span>";
+        const file = emote.image;
+        var urlCreator = window.URL || window.webkitURL;
+        var imageUrl = urlCreator.createObjectURL(file);
+        let emoteImage = document.createElement("img");
+        emoteImage.setAttribute("src", imageUrl);
+        emoteImage.setAttribute("class", "emote-image");
+        b.appendChild(emoteImage);
+        b.addEventListener("click", async function(e) {
+            if (!nameList.includes(emoteName)) {
+              if (nameList.length >= 5) {nameList.pop();}
+              nameList.unshift(emoteName);
+            }
+            saveRecent();
+            updateClipboard("popup/" + emotestr);
+            await sleep(1);
+            window.close();
+        });
+        a.appendChild(b);
+      }).catch(function (error) {
+        console.error(error);
+      })   
   });
   inp.addEventListener("keydown", function(e) {
       var x = document.getElementById(this.id + "autocomplete-list");
