@@ -1,23 +1,33 @@
- document.getElementById("upload").addEventListener("change", uploadImage, false);
+document.getElementById("upload").addEventListener("change", removeMessage, false);
+document.getElementById("submit").addEventListener("click", uploadImage, false);
+
 
 var db = new Dexie("Custom");
 db.version(1).stores({
-  emotes: "name, image",
+  emotes: "name, image"
 });
 
+function removeMessage(){
+  var a = document.querySelector("p");
+    a.innerText = "";
+}
+
 async function uploadImage() {
-    const fileList = this.files;
-    const numFiles = fileList.length;
-    for (let i = 0, numFiles = fileList.length; i < numFiles; i++) {
-      const file = fileList[i];
-      const blob = file; // await file.blob();
-      await db.emotes.put({
-        name: "Test",
-        image: blob
-      })
+    let text = document.getElementById("name").value;
+    const fileList = document.getElementById("upload").files;
+    if (text.length === 0 || fileList.length === 0) {
+      var a = document.querySelector("p");
+      a.innerText = "Please select a file and enter a name for the emote";
+      return;
     }
+    const file = fileList[0];
+    const blob = file; // await file.blob();
+    await db.emotes.put({
+      name: text,
+      image: blob
+    })
     var a = document.querySelector("p");
-    a.innerText = "Uploaded";
+    a.innerText = "Saved";
 }
 
 async function testDisplay() {
