@@ -24,10 +24,12 @@ function sleep(ms) {
   nameList = [];
   var gettingItem = browser.storage.sync.get('recent');
   gettingItem.then((res) => {
-    nameList = res.recent;
-    console.log(nameList);
-    addRecents();
-  })
+    if (res.recent) {
+      nameList = res.recent;
+      console.log(nameList);
+      addRecents();
+    }
+  });
   //console.log(nameList);
 
   inp.addEventListener("input", async function(e) {
@@ -68,7 +70,7 @@ function sleep(ms) {
               nameList.unshift(emoteName);
             }
             saveRecent();
-            updateClipboard("popup/" + emotestr);
+            updateClipboard(imageUrl);
             await sleep(1);
             window.close();
         });
@@ -111,21 +113,26 @@ function sleep(ms) {
     var b;
     console.log(nameList);
     for (i = 0; i < nameList.length; i++) {
-      // DIV to contain each image
-      b = document.createElement("DIV");
-      b.setAttribute("class", "autocomplete-item");
-      b.innerHTML = "<span class=\"emote-text\">" + nameList[i] + "</span>";
-      let emoteImage = document.createElement("img");
-      let emotestr = "img/" + nameList[i] + ".png";
-      emoteImage.setAttribute("src", emotestr);
-      emoteImage.setAttribute("class", "emote-image");
-      b.appendChild(emoteImage);
-      b.addEventListener("click", async function(e) {
-            updateClipboard("popup/" + emotestr);
-            await sleep(1);
-            window.close();
+      let emoteName = nameList[i];
+      db.emotes.get(emoteName, async function (emote) {
+        // DIV to contain each image
+        b = document.createElement("DIV");
+        b.setAttribute("class", "autocomplete-item");
+        b.innerHTML = "<span class=\"emote-text\">" + emoteName + "</span>";
+        const file = emote.image;
+        var urlCreator = window.URL || window.webkitURL;
+        var imageUrl = urlCreator.createObjectURL(file);
+        let emoteImage = document.createElement("img");
+        emoteImage.setAttribute("src", imageUrl);
+        emoteImage.setAttribute("class", "emote-image");
+        b.appendChild(emoteImage);
+        b.addEventListener("click", async function(e) {
+              updateClipboard(imageUrl);
+              await sleep(1);
+              window.close();
+        });
+        a.appendChild(b);
       });
-      a.appendChild(b);
     }
   }
   function addActive(x) {
