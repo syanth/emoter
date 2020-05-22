@@ -8,6 +8,6 @@ Clone this repository, and load it in Firefox in about:debugging.
 
 ### Todo
 
-* Add more default emotes.
-* Custom emotes
-* Port to Chrome
+* Add some default emotes.
+* Publish.
+* Port to Chrome.
