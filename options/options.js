@@ -4,7 +4,7 @@ document.getElementById("submit").addEventListener("click", uploadImage, false);
 
 var db = new Dexie("Custom");
 db.version(1).stores({
-  emotes: "name, image"
+  emotes: "name, image, type"
 });
 
 function removeMessage(){
@@ -21,10 +21,12 @@ async function uploadImage() {
       return;
     }
     const file = fileList[0];
-    const blob = file; // await file.blob();
+    // const blob = file; // await file.blob();
+    const fileType = (file.type).split('/')[1];
     await db.emotes.put({
       name: text,
-      image: blob
+      image: file,
+      type: fileType
     })
     var a = document.querySelector("p");
     a.innerText = "Saved";

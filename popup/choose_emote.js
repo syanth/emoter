@@ -1,15 +1,15 @@
 var db = new Dexie("Custom");
 db.version(1).stores({
-  emotes: "name, image"
+  emotes: "name, image, type"
 });
 
  autocomplete(document.getElementById("emInput"));
  document.getElementById("emInput").focus(); 
 
-function updateClipboard(path) {
+function updateClipboard(path, type) {
   fetch(browser.runtime.getURL(path))
   .then(response => response.arrayBuffer())
-  .then(buffer => browser.clipboard.setImageData(buffer, 'png'));
+  .then(buffer => browser.clipboard.setImageData(buffer, type));
 }
 
 function sleep(ms) {
@@ -70,7 +70,7 @@ function sleep(ms) {
               nameList.unshift(emoteName);
             }
             saveRecent();
-            updateClipboard(imageUrl);
+            updateClipboard(imageUrl, emote.type);
             await sleep(1);
             window.close();
         });
@@ -127,7 +127,7 @@ function sleep(ms) {
         emoteImage.setAttribute("class", "emote-image");
         b.appendChild(emoteImage);
         b.addEventListener("click", async function(e) {
-              updateClipboard(imageUrl);
+              updateClipboard(imageUrl, emote.type);
               await sleep(1);
               window.close();
         });
