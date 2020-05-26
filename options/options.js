@@ -1,5 +1,6 @@
 document.getElementById("upload").addEventListener("change", removeMessage, false);
-document.getElementById("submit").addEventListener("click", uploadImage, false);
+document.getElementById("submitButton").addEventListener("click", uploadImage, false);
+document.getElementById("deleteButton").addEventListener("click", deleteImage, false);
 
 
 var db = new Dexie("Custom");
@@ -7,9 +8,9 @@ db.version(1).stores({
   emotes: "name, image, type"
 });
 
-function removeMessage(){
-  var a = document.querySelector("p");
-    a.innerText = "";
+function removeMessage() {
+  var a = document.getElementById("saveMessage");
+  a.innerText = "";
 }
 
 async function uploadImage() {
@@ -27,9 +28,16 @@ async function uploadImage() {
       name: text,
       image: file,
       type: fileType
-    })
-    var a = document.querySelector("p");
+    });
+    var a = document.getElementById("saveMessage");
     a.innerText = "Saved";
+}
+
+async function deleteImage() {
+  let text = document.getElementById("deleteName").value;
+  await db.emotes.delete(text);
+  var a = document.getElementById("deleteMessage");
+  a.innerText = "Deleted"; 
 }
 
 async function testDisplay() {

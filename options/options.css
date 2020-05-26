@@ -1,9 +1,9 @@
 label {
     display: block;
-    color: #ffffff;
+    color: #000000;
     font-weight: 600;
   }
-  #uploadbox {
+.emoteform {
     padding: 1px;
   }
   label,
