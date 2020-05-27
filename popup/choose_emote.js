@@ -54,9 +54,14 @@ function sleep(ms) {
         // DIV to contain each matching image
         b = document.createElement("DIV");
         b.setAttribute("class", "autocomplete-item");
-        b.innerHTML = "<span class=\"emote-text\"><strong>" 
-          + emoteName.substr(0, val.length) + "</strong>" 
-          + emoteName.substr(val.length) + "</span>";
+        let bolded = document.createElement('span');
+        bolded.setAttribute("class", "bold-text");
+        let rest = document.createElement('span');
+        rest.setAttribute("class", "emote-text");
+        bolded.innerText = emoteName.substr(0, val.length);
+        rest.innerText = emoteName.substr(val.length);
+        b.appendChild(bolded);
+        b.appendChild(rest);
         const file = emote.image;
         var urlCreator = window.URL || window.webkitURL;
         var imageUrl = urlCreator.createObjectURL(file);
@@ -118,7 +123,10 @@ function sleep(ms) {
         // DIV to contain each image
         b = document.createElement("DIV");
         b.setAttribute("class", "autocomplete-item");
-        b.innerHTML = "<span class=\"emote-text\">" + emoteName + "</span>";
+        let rest = document.createElement('span');
+        rest.setAttribute("class", "emote-text");
+        rest.innerText = emoteName;
+        b.appendChild(rest);
         const file = emote.image;
         var urlCreator = window.URL || window.webkitURL;
         var imageUrl = urlCreator.createObjectURL(file);

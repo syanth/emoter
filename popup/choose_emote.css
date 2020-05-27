@@ -65,3 +65,7 @@ input[type=text] {
 .emote-text {
   color: #ffffff;
 }
+.bold-text {
+  color: #ffffff;
+  font-weight: bold;
+}
